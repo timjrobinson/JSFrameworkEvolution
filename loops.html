@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'">
+<title>Loops: ideas that came back — Yet Another Framework</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="progress"></div>
+<header class="site">
+  <a class="brand" href="index.html"><span>YAF</span>Yet Another Framework</a>
+  <nav aria-label="Chapters">
+    <a href="index.html">Start</a>
+    <a href="era-1.html">1 · DOM</a>
+    <a href="era-2.html">2 · MVC</a>
+    <a href="era-3.html">3 · Components</a>
+    <a href="era-4.html">4 · Compilers</a>
+    <a href="era-5.html">5 · Server</a>
+    <a href="lineage.html">Lineage</a>
+    <a href="loops.html" aria-current="page">Loops</a>
+    <a href="colophon.html">Colophon</a>
+  </nav>
+  <button class="badge" popovertarget="nojs">JS shipped: 0 bytes</button>
+</header>
+<div id="nojs" popover>
+  <h2>This page cannot run JavaScript.</h2>
+  <p>A Content-Security-Policy of <code>script-src 'none'</code> tells your browser to refuse any script on this site. <a href="colophon.html">How it works anyway</a>.</p>
+</div>
+
+<main>
+  <p class="kicker">Cross-section</p>
+  <h1>Loops: <mark>ideas that came back</mark></h1>
+  <p class="standfirst">Have framework designs gone in circles? Yes, at least nine times. Whether that's a circle or a spiral depends on whether the second visit was better than the first. Usually it was.</p>
+
+  <p>The pattern is consistent. An idea is tried early and abandoned, generally for a practical reason and not because it was wrong: the browsers were too slow, the language too weak, the tooling missing. The industry moves to an alternative and pushes it until its own costs become unbearable. Then someone revisits the original idea with the practical obstacle removed.</p>
+
+  <div class="loops">
+
+  <section class="loop-card" id="server">
+    <h2>Rendering goes back to the server</h2>
+    <ol class="chain">
+      <li><span class="n">Server renders pages <small>1995</small></span></li>
+      <li><span class="n">Client renders everything <small>2010</small></span></li>
+      <li><span class="n">Server, then client again <small>2016</small></span></li>
+      <li class="loop"><span class="n">Server renders pages <small>2021</small></span></li>
+    </ol>
+    <p>PHP and Rails assembled HTML on the server. The SPA era moved all of that into the browser and reduced the server to a JSON API. Meta-frameworks brought server rendering back but kept the full client app, so the work was done twice. <a href="era-5.html#astro">Astro</a>, <a href="era-5.html#rsc">Server Components</a> and <a href="era-5.html#htmx">htmx</a> now treat the server as the primary renderer again.</p>
+    <p class="verdict"><b>Circle or spiral?</b> Spiral. A 2005 PHP page and a 2025 server component both query a database and emit markup. The modern one shares a component model with the interactive parts and can update in place without a full reload.</p>
+  </section>
+
+  <section class="loop-card" id="reactivity">
+    <h2>Observables, abandoned and then rebuilt as signals</h2>
+    <ol class="chain">
+      <li><span class="n">Knockout observables <small>2010</small></span></li>
+      <li><span class="n">Dirty checking <small>2010</small></span></li>
+      <li><span class="n">Virtual DOM diffing <small>2013</small></span></li>
+      <li class="loop"><span class="n">Signals <small>2022</small></span></li>
+    </ol>
+    <p>This is the cleanest loop in the history. <a href="era-2.html#knockout">Knockout</a> tracked exactly which pieces of UI depended on which data. The industry preferred approaches that didn't track at all: re-check everything (AngularJS) or re-render everything and diff (React). Those were simpler to reason about. They also scaled with the size of the UI and not the size of the change. <a href="era-5.html#signals">Signals</a> are Knockout's model with the syntax and consistency problems solved.</p>
+    <p class="verdict"><b>Circle or spiral?</b> Spiral, and the authors say so. Solid's creator has described his work explicitly as returning to Knockout with what was learned since.</p>
+  </section>
+
+  <section class="loop-card" id="wire">
+    <h2>HTML over the wire</h2>
+    <ol class="chain">
+      <li><span class="n">Ajax returns HTML fragments <small>2005</small></span></li>
+      <li><span class="n">Ajax returns JSON <small>2010</small></span></li>
+      <li class="loop"><span class="n">Requests return HTML fragments <small>2020</small></span></li>
+    </ol>
+    <p>The X in Ajax stood for XML, and in practice early Ajax mostly fetched ready-made HTML and inserted it. Rails had helpers for exactly this in 2005. The MVC era decided that servers should send pure data and clients should own all rendering. <a href="era-5.html#htmx">htmx and Hotwire</a> reverse that decision. And Server Components, viewed from a distance, are a very sophisticated way to send rendered UI over the wire.</p>
+    <p class="verdict"><b>Circle or spiral?</b> Nearly a circle. htmx's own author describes it as completing an old idea, not inventing a new one.</p>
+  </section>
+
+  <section class="loop-card" id="mixing">
+    <h2>Mixing markup and logic</h2>
+    <ol class="chain">
+      <li><span class="n">PHP: code in HTML <small>1995</small></span></li>
+      <li><span class="n">Strict separation <small>2005</small></span></li>
+      <li class="loop"><span class="n">JSX: HTML in code <small>2013</small></span></li>
+      <li class="loop"><span class="n">SQL in components <small>2023</small></span></li>
+    </ol>
+    <p>Early PHP interleaved database queries, logic and markup in one file. The reaction, "separation of concerns", produced unobtrusive JavaScript and logic-less templates. <a href="era-3.html#react">React</a> argued the separation was artificial and put markup back in code. Server components finished the journey. When a 2023 conference demo showed an SQL query inside a form handler inside a component, half the audience saw the future and the other half saw 2004.</p>
+    <p class="verdict"><b>Circle or spiral?</b> Spiral. The old problem was never co-location. It was the absence of components, scoping and escaping. Those now exist.</p>
+  </section>
+
+  <section class="loop-card" id="twoway">
+    <h2>Two-way binding</h2>
+    <ol class="chain">
+      <li><span class="n">Two-way by default <small>2010</small></span></li>
+      <li><span class="n">One-way only <small>2013</small></span></li>
+      <li class="loop"><span class="n">Two-way as opt-in sugar <small>2016+</small></span></li>
+    </ol>
+    <p>Knockout and AngularJS made two-way binding their headline feature. React declared it harmful, because when anything can write to anything, tracing a change is hopeless. But writing a value prop and a change handler for every form input is tedious, so it came back in limited form: Vue's <code>v-model</code>, Svelte's <code>bind:</code>, Angular's <code>model()</code>.</p>
+    <p class="verdict"><b>Circle or spiral?</b> Spiral. The modern versions are shorthand for a one-way flow plus an event, scoped to one component boundary. The convenience returned without the app-wide tangle.</p>
+  </section>
+
+  <section class="loop-card" id="compile">
+    <h2>The compiler</h2>
+    <ol class="chain">
+      <li><span class="n">GWT: compile everything <small>2006</small></span></li>
+      <li><span class="n">"It's just JavaScript" <small>2013</small></span></li>
+      <li class="loop"><span class="n">The framework is a compiler <small>2016–25</small></span></li>
+    </ol>
+    <p><a href="era-1.html#gwt">GWT</a> treated JavaScript as an output format, and the community rejected that. For years "it's just JavaScript" was React's selling point against template-based rivals. Yet JSX already needed a compiler, and after <a href="era-4.html#svelte">Svelte</a> the pretence dropped. Svelte, Solid, Vue, Angular and Qwik all lean on compilation, and React now ships a compiler too.</p>
+    <p class="verdict"><b>Circle or spiral?</b> Spiral. GWT replaced the language. Modern compilers keep you in JavaScript and TypeScript and optimise what you wrote.</p>
+  </section>
+
+  <section class="loop-card" id="mutation">
+    <h2>Mutation</h2>
+    <ol class="chain">
+      <li><span class="n">Mutate freely <small>2006</small></span></li>
+      <li><span class="n">Never mutate <small>2015</small></span></li>
+      <li class="loop"><span class="n">Mutate, but tracked <small>2020+</small></span></li>
+    </ol>
+    <p>jQuery and Backbone code mutated objects directly. <a href="era-3.html#flux">Redux</a> made immutability doctrine: never change state, always return a new copy. That gave predictability and a great deal of spread-operator boilerplate. Then Immer let you write mutations that produce immutable results, and Vue 3 and Svelte 5 use Proxies so that <code>todo.done = true</code> is both a plain assignment and a tracked update.</p>
+    <p class="verdict"><b>Circle or spiral?</b> Spiral. It looks like 2006 code. Underneath, every write is intercepted.</p>
+  </section>
+
+  <section class="loop-card" id="batteries">
+    <h2>Batteries included</h2>
+    <ol class="chain">
+      <li><span class="n">Full toolkits: Dojo, YUI <small>2005</small></span></li>
+      <li><span class="n">Small libraries: jQuery, Backbone <small>2006–10</small></span></li>
+      <li><span class="n">Full frameworks: Angular, Ember <small>2010–12</small></span></li>
+      <li><span class="n">Just the view: React <small>2013</small></span></li>
+      <li class="loop"><span class="n">Full meta-frameworks <small>2016+</small></span></li>
+    </ol>
+    <p>This one is a pendulum, and it has swung at least four times. Complete toolkits feel heavy, so people move to small composable libraries. Assembling those becomes a job in itself, so people move to integrated frameworks. "JavaScript fatigue" in 2015 was the low point of one swing. <a href="era-4.html#next">Meta-frameworks</a> were the swing back.</p>
+    <p class="verdict"><b>Circle or spiral?</b> Mostly a circle. This is a genuine trade-off with no stable answer, so expect it to swing again.</p>
+  </section>
+
+  <section class="loop-card" id="forms">
+    <h2>Forms and links</h2>
+    <ol class="chain">
+      <li><span class="n">&lt;form action&gt; <small>1993</small></span></li>
+      <li><span class="n">preventDefault + fetch <small>2010</small></span></li>
+      <li class="loop"><span class="n">&lt;form action&gt; <small>2021</small></span></li>
+    </ol>
+    <p>The SPA era's first move in any form handler was <code>event.preventDefault()</code>: stop the browser doing what it does, then reimplement it with a fetch call, a loading flag and an error state. <a href="era-5.html#remix">Remix</a> pointed out that the browser's built-in behaviour was fine and should be enhanced, not replaced. React 19 then made <code>&lt;form action={fn}&gt;</code> a core feature. File-based routing is the same story for URLs: a file's path is its address, as in PHP.</p>
+    <p class="verdict"><b>Circle or spiral?</b> Spiral, barely. Same element, same attribute, now with pending states and no full-page reload.</p>
+  </section>
+
+  </div>
+
+  <h2>So is any of it progress?</h2>
+  <p>Yes. The cynical reading, that the industry spent twenty years returning to PHP, misses what changed on each lap.</p>
+  <details open>
+    <summary>What each return had that the original lacked</summary>
+    <p><strong>A component model.</strong> The server rendering of 2005 had includes and partials. Today's has composable, typed components shared between server and client.</p>
+    <p><strong>A language that grew up.</strong> Proxies made transparent reactivity possible. Modules, classes and async functions removed whole categories of library.</p>
+    <p><strong>Compilers.</strong> Many of the early ideas failed on ergonomics. A compiler can now hide the awkward parts.</p>
+    <p><strong>The choice itself.</strong> In 2005 you rendered on the server because nothing else was possible. Now it's a decision, made per page or per component.</p>
+  </details>
+  <details>
+    <summary>Why the loops happen at all</summary>
+    <p>Each generation of developers meets the previous generation's solution without having felt the problem it solved. To someone who started in 2016, an SPA with a JSON API was simply how websites worked, and its costs were the only visible thing about it. The server-rendered alternative looked fresh.</p>
+    <p>There's also a structural reason. Most of these are real trade-offs: server versus client, explicit versus automatic, integrated versus composable. A trade-off has no permanent answer. As hardware, networks and the kinds of sites people build change, the best point on the curve moves, and the industry overshoots it in both directions.</p>
+  </details>
+  <details>
+    <summary>What a prediction would look like</summary>
+    <p>If the pattern holds, the next reversal will come from wherever today's consensus is paying the most. Two candidates stand out. The first is the complexity of the server/client boundary in the current meta-frameworks, which invites a swing back toward something simpler. The second is local-first software, where data lives on the device and syncs in the background. That would move state back to the client, and it would look a lot like <a href="era-2.html#meteor">Meteor</a> in 2012.</p>
+  </details>
+
+  <nav class="pager" aria-label="Chapters">
+    <a href="lineage.html">← Lineage</a>
+    <a class="next" href="colophon.html">Colophon: how this site works →</a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <p>Hand-written HTML and CSS. No build step, no bundler, no hydration, no node_modules.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'">
+<title>3 · Components and the virtual DOM (2013–2016) — Yet Another Framework</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="progress"></div>
+<header class="site">
+  <a class="brand" href="index.html"><span>YAF</span>Yet Another Framework</a>
+  <nav aria-label="Chapters">
+    <a href="index.html">Start</a>
+    <a href="era-1.html">1 · DOM</a>
+    <a href="era-2.html">2 · MVC</a>
+    <a href="era-3.html" aria-current="page">3 · Components</a>
+    <a href="era-4.html">4 · Compilers</a>
+    <a href="era-5.html">5 · Server</a>
+    <a href="lineage.html">Lineage</a>
+    <a href="loops.html">Loops</a>
+    <a href="colophon.html">Colophon</a>
+  </nav>
+  <button class="badge" popovertarget="nojs">JS shipped: 0 bytes</button>
+</header>
+<div id="nojs" popover>
+  <h2>This page cannot run JavaScript.</h2>
+  <p>A Content-Security-Policy of <code>script-src 'none'</code> tells your browser to refuse any script on this site. <a href="colophon.html">How it works anyway</a>.</p>
+</div>
+
+<main>
+  <p class="kicker">Chapter 3 · 2013–2016</p>
+  <h1>Components and <mark>the virtual DOM</mark></h1>
+  <p class="standfirst">React's pitch was that tracking changes is the wrong problem. Describe what the screen should look like for any given state, run that description again whenever state changes, and let the library work out the difference.</p>
+
+  <p>Facebook's problem in 2011 was the one from the last chapter, at scale. Its ads tools and chat had state that changed constantly from many sources, and bugs kept reappearing. The most famous was the unread-message counter that said "1" when there was nothing to read. It was fixed and came back, repeatedly, because several pieces of code each updated it by hand.</p>
+
+  <p>The engineer Jordan Walke noticed that Facebook's server-side code didn't have this class of bug. On the server, in PHP with an extension called XHP, you didn't <em>update</em> a page. You rendered it from scratch on every request, from the current data. He asked whether the client could work the same way.</p>
+
+  <article class="fw" id="react">
+    <header><h3>React</h3><p class="meta">2013 · Jordan Walke · Facebook</p></header>
+    <p>A React component is a function from data to a description of UI. When data changes, React calls the function again, gets a new description, compares it with the previous one, and applies only the differences to the real page. That in-memory description is the <strong>virtual DOM</strong>.</p>
+    <p>React also put the markup <em>inside</em> the JavaScript, using a syntax extension called JSX. This was received badly. A decade of best practice said HTML, CSS and JavaScript belonged in separate files. Pete Hunt's reply, in a talk titled "Rethinking Best Practices", was that templates and their logic were one concern, already tightly coupled, and that separating them by file type was separating technologies and not concerns.</p>
+    <dl class="facts">
+      <dt>Why</dt><dd>To make UI bugs caused by out-of-sync state impossible by construction.</dd>
+      <dt>Borrowed</dt><dd>XHP's components-as-markup. Functional programming's idea of UI as a pure function of state. Backbone's "just re-render it", made fast.</dd>
+      <dt>Reacted to</dt><dd>Two-way binding and template languages. In React, data flows down through props, events flow up, and loops are just <code>.map()</code>.</dd>
+      <dt class="won">Got right</dt><dd><strong>Components</strong> as the unit of everything. A simple mental model that scaled to large teams. And because rendering was abstracted from the DOM, the same model drove server rendering and React Native.</dd>
+      <dt class="lost">Fell short</dt><dd>It was only the view. Routing, data fetching and state management were left to a churning ecosystem, producing the "JavaScript fatigue" of 2015–16. Re-running everything is wasteful by default, so performance work meant hand-placing <code>shouldComponentUpdate</code> and later <code>useMemo</code>. And it effectively required a build step.</dd>
+      <dt>Outcome</dt><dd>Not replaced. React became the default, and every framework since has been defined partly by how it differs from React.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="flux">
+    <header><h3>Flux &amp; Redux</h3><p class="meta">2014 · Facebook &nbsp;·&nbsp; 2015 · Dan Abramov, Andrew Clark</p></header>
+    <p>React handled the view. Flux was Facebook's pattern for the data behind it: state lives in stores, changes happen only by dispatching actions, and everything flows in one direction. Dozens of implementations appeared within a year. Redux won by reducing the idea to a single store, plus pure functions called reducers that take the old state and an action and return the new state.</p>
+    <dl class="facts">
+      <dt>Borrowed</dt><dd>Redux took its architecture almost directly from <a href="#elm">Elm</a>, and its name for the core function from <code>Array.prototype.reduce</code>.</dd>
+      <dt class="won">Got right</dt><dd>Predictability. Every change was a logged, replayable event, which made time-travel debugging and hot reloading possible. It made immutable data mainstream in JavaScript.</dd>
+      <dt class="lost">Fell short</dt><dd>Boilerplate. Changing one field could mean touching an action type, an action creator, a reducer and a selector. It was also applied far beyond its need, to hold form inputs and server responses that were never really global state.</dd>
+      <dt>Outcome</dt><dd>Split up by purpose. Server data moved to caching libraries such as React Query and Apollo. Local state went back into components with <a href="era-4.html#hooks">hooks</a>. What remained moved to lighter stores. Redux Toolkit quietly added mutable-looking syntax back on top.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="elm">
+    <header><h3>Elm</h3><p class="meta">2012 · Evan Czaplicki</p></header>
+    <p>Elm isn't a JavaScript framework. It's a separate, purely functional language that compiles to JavaScript. It belongs here because of its influence. The Elm Architecture is three parts: a model, an update function that produces a new model from a message, and a view function that renders the model.</p>
+    <dl class="facts">
+      <dt class="won">Got right</dt><dd>No runtime exceptions in practice, famously helpful compiler errors, and an architecture so clean that Redux copied it wholesale.</dd>
+      <dt class="lost">Fell short</dt><dd>It asked you to leave the JavaScript ecosystem. Interop was deliberately restricted, the language was governed tightly by a very small team, and releases slowed to a near stop after 2019.</dd>
+      <dt>Outcome</dt><dd>A small, loyal community. Its ideas travelled much further than the language did.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="vue">
+    <header><h3>Vue</h3><p class="meta">2014 · Evan You</p></header>
+    <p>Evan You had used AngularJS at Google and liked the declarative templates and data binding but not the weight. Vue was his extraction of the good parts. Version 1 was, mechanically, close to Knockout: reactive data with dependency tracking, driving direct DOM updates. The difference was ergonomics. Vue used JavaScript getters and setters so reactive data looked like plain objects. Version 2, in 2016, added a virtual DOM underneath and single-file components.</p>
+    <dl class="facts">
+      <dt>Borrowed</dt><dd>Templates and directives from AngularJS. Reactivity from Knockout. Components and, from v2, the virtual DOM from React.</dd>
+      <dt class="won">Got right</dt><dd>Approachability. You could add it to a page with a script tag and no build, then grow into a full toolchain. The docs were exceptional. Official routing and state libraries spared users React's choice paralysis. It grew huge without a corporate sponsor, especially in China and in the Laravel community.</dd>
+      <dt class="lost">Fell short</dt><dd>Vue 2's reactivity had well-known blind spots, such as adding a property to an object. The Options API organised code by type and not by feature, and reusing logic through mixins scaled poorly. The migration to Vue 3 was slow and split the ecosystem for a couple of years.</dd>
+      <dt>Outcome</dt><dd>Still one of the big three. Its reactivity core, rebuilt on Proxies for <a href="era-5.html#signals">Vue 3</a>, turned out to be the model the rest of the industry later converged on.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="angular">
+    <header><h3>Angular (2+)</h3><p class="meta">2016 · Google</p></header>
+    <p>In October 2014, at ng-europe, the Angular team showed Angular 2. Controllers, scopes and <code>ng-</code> directives were all gone, and there was no migration path. It is still the standard case study in how not to announce a new version. What shipped in 2016 was a different framework with the same name: component-based, written in TypeScript, built around RxJS streams, with change detection driven by a library called zone.js that patched every asynchronous browser API to know when something might have changed.</p>
+    <dl class="facts">
+      <dt>Reacted to</dt><dd>AngularJS's own dirty-checking limits, and React's component model, which it adopted.</dd>
+      <dt class="won">Got right</dt><dd>Its bet on TypeScript, made when that was unfashionable, was vindicated across the whole industry. It remains the most complete official toolkit: router, forms, HTTP, testing and CLI, all versioned together. Large organisations value exactly that.</dd>
+      <dt class="lost">Fell short</dt><dd>The rewrite squandered AngularJS's lead. NgModules, decorators, RxJS and zones made for a heavy learning curve and large bundles. Zone-based change detection was the old dirty check with better triggers.</dd>
+      <dt>Outcome</dt><dd>Stable in the enterprise, and since 2023 steadily replacing its own foundations: standalone components instead of NgModules, and <a href="era-5.html#signals">signals</a> instead of zones.</dd>
+    </dl>
+    <p class="aside">Rob Eisenberg left the Angular 2 team in 2014 over its direction and built Aurelia, a standards-focused alternative. It was well regarded and never found a large audience.</p>
+  </article>
+
+  <article class="fw" id="webcomponents">
+    <header><h3>Web Components &amp; Polymer</h3><p class="meta">2013 · Google</p></header>
+    <p>If components are the right abstraction, the browser should provide them. That was the bet behind Web Components: custom elements, shadow DOM for style encapsulation, and <code>&lt;template&gt;</code>. Polymer was Google's library on top, and for a while Google suggested it was the future of all web development.</p>
+    <dl class="facts">
+      <dt class="won">Got right</dt><dd>Interoperability. A custom element works in any framework or none, which makes it the natural choice for design systems that must outlive framework fashions.</dd>
+      <dt class="lost">Fell short</dt><dd>Standardisation took most of a decade, and one of the four original specs, HTML Imports, was rejected by other browsers. Polymer depended on heavy polyfills in the meantime. Worse, the standards gave you an element lifecycle but no answer to the question everyone was actually asking: how do I render from state? Server rendering was also unsolved for years.</dd>
+      <dt>Outcome</dt><dd>Polymer shrank into Lit, a small and well-liked rendering library. Web Components became a solid interop layer, not the framework-killer once promised.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="small">
+    <header><h3>The small ones: Preact, Mithril, Riot</h3><p class="meta">2014–2015</p></header>
+    <p>React's ideas were simple enough to reimplement, and a wave of libraries did so in a fraction of the size. Mithril bundled a virtual DOM, router and request helper in a few kilobytes. Riot offered custom-tag components. Preact, by Jason Miller, reproduced React's API in about 3 kB.</p>
+    <dl class="facts">
+      <dt class="won">Got right</dt><dd>They proved the virtual DOM was a technique, not a product, and kept pressure on React's bundle size.</dd>
+      <dt>Outcome</dt><dd>Preact endures wherever bytes matter. It also became an idea laboratory: Miller's writing popularised <a href="era-5.html#astro">islands architecture</a>, and Preact was the first React-like library to adopt <a href="era-5.html#signals">signals</a>.</dd>
+    </dl>
+  </article>
+
+  <h2>What the era settled</h2>
+  <p>Components won, completely. By 2016 Angular, Vue, Ember and the web platform itself had all reorganised around them. One-way data flow became the default assumption. JSX went from heresy to ordinary.</p>
+  <p>The costs arrived together. Every serious app now needed a compiler and a bundler. The browser received an empty <code>&lt;div&gt;</code> and a megabyte of JavaScript, and nothing appeared until that JavaScript had downloaded and run. And re-running components to find what changed did a lot of work to conclude that most things hadn't. <a href="era-4.html">Chapter 4</a> is about people attacking each of those.</p>
+
+  <nav class="pager" aria-label="Chapters">
+    <a href="era-2.html">← 2: Apps need structure</a>
+    <a class="next" href="era-4.html">Chapter 4: Compilers →</a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <p>Hand-written HTML and CSS. No build step, no bundler, no hydration, no node_modules.</p>
+</footer>
+</body>
+</html>

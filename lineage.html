@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'">
+<title>Lineage: who inspired whom — Yet Another Framework</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="progress"></div>
+<header class="site">
+  <a class="brand" href="index.html"><span>YAF</span>Yet Another Framework</a>
+  <nav aria-label="Chapters">
+    <a href="index.html">Start</a>
+    <a href="era-1.html">1 · DOM</a>
+    <a href="era-2.html">2 · MVC</a>
+    <a href="era-3.html">3 · Components</a>
+    <a href="era-4.html">4 · Compilers</a>
+    <a href="era-5.html">5 · Server</a>
+    <a href="lineage.html" aria-current="page">Lineage</a>
+    <a href="loops.html">Loops</a>
+    <a href="colophon.html">Colophon</a>
+  </nav>
+  <button class="badge" popovertarget="nojs">JS shipped: 0 bytes</button>
+</header>
+<div id="nojs" popover>
+  <h2>This page cannot run JavaScript.</h2>
+  <p>A Content-Security-Policy of <code>script-src 'none'</code> tells your browser to refuse any script on this site. <a href="colophon.html">How it works anyway</a>.</p>
+</div>
+
+<main class="wide">
+  <p class="kicker">Cross-section</p>
+  <h1>Lineage: <mark>who inspired whom</mark></h1>
+  <p class="standfirst">Frameworks don't descend from one another in a tree. Ideas do. Follow any single idea through time and you get a clean line that wanders in and out of a dozen projects.</p>
+
+  <p>Seven threads are traced below. Each chip links to the framework's entry. A yellow chip marks the point where a thread returns to an idea it had earlier abandoned; those are examined on the <a href="loops.html">loops page</a>.</p>
+
+  <section class="thread">
+    <h3>Thread 1: How the view learns that data changed</h3>
+    <p>The central technical question of the whole history. Fine-grained tracking, then coarse re-rendering, then fine-grained again.</p>
+    <ol class="chain">
+      <li><a href="era-2.html#sproutcore">SproutCore KVO <small>2007</small></a></li>
+      <li><a href="era-2.html#knockout">Knockout observables <small>2010</small></a></li>
+      <li><a href="era-2.html#angularjs">AngularJS dirty checking <small>2010</small></a></li>
+      <li><a href="era-3.html#react">React virtual DOM <small>2013</small></a></li>
+      <li><a href="era-3.html#vue">Vue getters/setters <small>2014</small></a></li>
+      <li><a href="era-4.html#svelte">Svelte compiler <small>2016</small></a></li>
+      <li><a href="era-4.html#solid">Solid signals <small>2018</small></a></li>
+      <li class="loop"><a href="era-5.html#signals">Signals in Preact, Angular, Svelte 5 <small>2022–24</small></a></li>
+    </ol>
+  </section>
+
+  <section class="thread">
+    <h3>Thread 2: Where the HTML is produced</h3>
+    <p>Server, then client, then both, then mostly server.</p>
+    <ol class="chain">
+      <li><span class="n">CGI, PHP, Rails <small>1993–2004</small></span></li>
+      <li><a href="era-1.html#jquery">Server HTML + jQuery <small>2006</small></a></li>
+      <li><a href="era-2.html#backbone">Client-rendered SPA <small>2010</small></a></li>
+      <li><a href="era-4.html#next">SSR + hydration <small>2016</small></a></li>
+      <li class="loop"><a href="era-5.html#astro">Islands <small>2021</small></a></li>
+      <li class="loop"><a href="era-5.html#rsc">Server Components <small>2023</small></a></li>
+    </ol>
+  </section>
+
+  <section class="thread">
+    <h3>Thread 3: Components</h3>
+    <p>From widgets drawn by a toolkit, to a function that returns markup.</p>
+    <ol class="chain">
+      <li><a href="era-1.html#dojo">Dojo Dijit widgets <small>2005</small></a></li>
+      <li><a href="era-1.html#jquery">jQuery UI plugins <small>2007</small></a></li>
+      <li><a href="era-2.html#angularjs">Angular directives <small>2010</small></a></li>
+      <li><span class="n">XHP (PHP) <small>2010</small></span></li>
+      <li><a href="era-3.html#react">React components <small>2013</small></a></li>
+      <li><a href="era-3.html#webcomponents">Custom elements <small>2013–18</small></a></li>
+      <li><a href="era-3.html#vue">Single-file components <small>2016</small></a></li>
+      <li><a href="era-4.html#hooks">Function components + hooks <small>2019</small></a></li>
+    </ol>
+  </section>
+
+  <section class="thread">
+    <h3>Thread 4: Application state architecture</h3>
+    <p>From state in the DOM, to one global store, to state split by where it comes from.</p>
+    <ol class="chain">
+      <li><a href="era-1.html#jquery">State in the DOM <small>2006</small></a></li>
+      <li><a href="era-2.html#backbone">Backbone models <small>2010</small></a></li>
+      <li><a href="era-3.html#elm">Elm Architecture <small>2012</small></a></li>
+      <li><a href="era-3.html#flux">Flux <small>2014</small></a></li>
+      <li><a href="era-3.html#flux">Redux <small>2015</small></a></li>
+      <li><a href="era-4.html#hooks">Hooks + query caches <small>2019</small></a></li>
+      <li class="loop"><a href="era-5.html#remix">Loaders: state on the server <small>2021</small></a></li>
+    </ol>
+  </section>
+
+  <section class="thread">
+    <h3>Thread 5: Routing</h3>
+    <p>The URL was ignored, then bolted on, then made central, then mapped back onto the file system.</p>
+    <ol class="chain">
+      <li><span class="n">Files as URLs (PHP) <small>1995</small></span></li>
+      <li><a href="era-2.html#backbone">Hash routes <small>2010</small></a></li>
+      <li><a href="era-2.html#ember">Ember nested router <small>2011</small></a></li>
+      <li><span class="n">React Router <small>2014</small></span></li>
+      <li class="loop"><a href="era-4.html#next">Next.js file routes <small>2016</small></a></li>
+      <li><a href="era-5.html#remix">Remix nested loaders <small>2021</small></a></li>
+    </ol>
+  </section>
+
+  <section class="thread">
+    <h3>Thread 6: The framework as a compiler</h3>
+    <p>Rejected as heavy-handed in 2006. Universal by 2025.</p>
+    <ol class="chain">
+      <li><a href="era-1.html#gwt">GWT <small>2006</small></a></li>
+      <li><span class="n">CoffeeScript <small>2009</small></span></li>
+      <li><a href="era-3.html#react">JSX + Babel <small>2013–14</small></a></li>
+      <li><a href="era-3.html#angular">Angular AOT <small>2016</small></a></li>
+      <li class="loop"><a href="era-4.html#svelte">Svelte <small>2016</small></a></li>
+      <li><a href="era-4.html#solid">Solid <small>2018</small></a></li>
+      <li><a href="era-5.html#qwik">Qwik optimizer <small>2021</small></a></li>
+      <li><a href="era-5.html#signals">React Compiler <small>2025</small></a></li>
+    </ol>
+  </section>
+
+  <section class="thread">
+    <h3>Thread 7: HTML over the wire</h3>
+    <p>The technique Ajax started with, set aside for JSON, then revived.</p>
+    <ol class="chain">
+      <li><a href="era-1.html#prototype">Rails + Prototype Ajax helpers <small>2005</small></a></li>
+      <li><span class="n">pjax <small>2011</small></span></li>
+      <li><span class="n">Turbolinks <small>2012</small></span></li>
+      <li><span class="n">intercooler.js <small>2013</small></span></li>
+      <li><span class="n">Phoenix LiveView <small>2018</small></span></li>
+      <li class="loop"><a href="era-5.html#htmx">htmx, Hotwire <small>2020</small></a></li>
+    </ol>
+  </section>
+
+  <h2>The same information, by framework</h2>
+  <p>What each project took, what it was pushing against, and what it passed on.</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead>
+      <tr><th>Framework</th><th>Borrowed from</th><th>Reacting against</th><th>Passed on</th></tr>
+    </thead>
+    <tbody>
+      <tr><th><a href="era-1.html#dojo">Dojo</a></th><td>Desktop toolkits, Python's Twisted</td><td>Private, one-off DHTML libraries</td><td>Modules (AMD), Deferreds that became Promises</td></tr>
+      <tr><th><a href="era-1.html#prototype">Prototype</a></th><td>Ruby</td><td>JavaScript's bare standard library</td><td><code>$</code>, <code>bind</code>, array methods now in the language</td></tr>
+      <tr><th><a href="era-1.html#jquery">jQuery</a></th><td>CSS selectors, Prototype's <code>$</code></td><td>Prototype's patching of built-ins; the verbose DOM API</td><td><code>querySelectorAll</code>, <code>classList</code>, <code>fetch</code>; the plugin economy</td></tr>
+      <tr><th><a href="era-1.html#gwt">GWT</a></th><td>Java, Swing</td><td>JavaScript as an application language</td><td>Compile-to-JS, code splitting, typed front ends</td></tr>
+      <tr><th><a href="era-2.html#backbone">Backbone</a></th><td>Rails MVC, REST</td><td>jQuery spaghetti; state in the DOM</td><td>Client-side models and routers; "re-render the view"</td></tr>
+      <tr><th><a href="era-2.html#knockout">Knockout</a></th><td>MVVM from WPF and Silverlight</td><td>Manual DOM updates</td><td>Observables and computeds, to Vue, MobX, Solid, signals</td></tr>
+      <tr><th><a href="era-2.html#angularjs">AngularJS</a></th><td>Java dependency injection, Flex-style binding</td><td>Boilerplate; untestable front-end code</td><td>Declarative templates and directives, to Vue and Alpine</td></tr>
+      <tr><th><a href="era-2.html#ember">Ember</a></th><td>SproutCore, Cocoa, Rails</td><td>Bespoke architecture in every app</td><td>Nested routing, framework CLIs, meta-framework conventions</td></tr>
+      <tr><th><a href="era-2.html#meteor">Meteor</a></th><td>Node, MongoDB, real-time sync research</td><td>The client/server divide</td><td>Isomorphic code, optimistic UI, server functions</td></tr>
+      <tr><th><a href="era-3.html#react">React</a></th><td>XHP, functional programming, game-engine render loops</td><td>Two-way binding, template languages, manual updates</td><td>Components, JSX, one-way data flow, to nearly everything</td></tr>
+      <tr><th><a href="era-3.html#flux">Redux</a></th><td>Elm, Flux, event sourcing</td><td>Scattered mutable state</td><td>Immutable updates, devtools, reducers (<code>useReducer</code>)</td></tr>
+      <tr><th><a href="era-3.html#vue">Vue</a></th><td>AngularJS templates, Knockout reactivity, React components</td><td>AngularJS's weight; React's JSX and tooling demands</td><td>Single-file components; Vite; a Proxy-based reactivity core</td></tr>
+      <tr><th><a href="era-3.html#angular">Angular 2+</a></th><td>React's components, TypeScript, RxJS</td><td>AngularJS scopes and the digest cycle</td><td>TypeScript as the industry default</td></tr>
+      <tr><th><a href="era-3.html#webcomponents">Polymer / Lit</a></th><td>The browser's own built-in elements</td><td>Framework lock-in</td><td>Custom elements as an interop standard</td></tr>
+      <tr><th><a href="era-4.html#next">Next.js</a></th><td>PHP's file routing, Rails and Ember conventions</td><td>Blank-page SPAs; webpack configuration</td><td>The meta-framework as the default starting point</td></tr>
+      <tr><th><a href="era-4.html#svelte">Svelte</a></th><td>Ractive, Vue's single-file components</td><td>Virtual DOM overhead; runtime size</td><td>Compiler-first design, adopted by Solid, Vue Vapor, React Compiler</td></tr>
+      <tr><th><a href="era-4.html#solid">Solid</a></th><td>Knockout, S.js, React's JSX</td><td>Re-rendering whole components; dependency arrays</td><td>The modern signals design, to Angular, Svelte 5, Preact, Qwik</td></tr>
+      <tr><th><a href="era-5.html#astro">Astro</a></th><td>Static site generators, Marko, the islands idea</td><td>Hydrating whole pages of static content</td><td>Zero-JS-by-default as a mainstream stance</td></tr>
+      <tr><th><a href="era-5.html#remix">Remix</a></th><td>Ember's router, HTML forms, Rails controllers</td><td>Client-side fetching and state bookkeeping</td><td>Loaders and actions, copied by SvelteKit, SolidStart and others</td></tr>
+      <tr><th><a href="era-5.html#rsc">Server Components</a></th><td>XHP and PHP, Meteor methods, GraphQL colocation</td><td>Hydration cost; client-side fetch waterfalls</td><td>Still being decided</td></tr>
+      <tr><th><a href="era-5.html#qwik">Qwik</a></th><td>Solid's signals, Marko, lessons from AngularJS</td><td>Hydration itself</td><td>Resumability as a concept</td></tr>
+      <tr><th><a href="era-5.html#htmx">htmx</a></th><td>pjax, Turbolinks, intercooler.js, REST's hypermedia constraint</td><td>The SPA and the JSON API</td><td>A credible no-build, any-backend alternative</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Three patterns in the table</h2>
+  <p><strong>The influential projects usually aren't the popular ones.</strong> Knockout, Elm, Ember, Meteor, Solid and Qwik each had modest adoption at best. Each supplied an idea that a larger project later took mainstream. The winners were mostly synthesisers: jQuery, React, Vue and Next.js all assembled existing ideas with better ergonomics.</p>
+  <p><strong>The same people keep reappearing.</strong> Miško Hevery made AngularJS and then Qwik, which repudiates it. Rich Harris made Ractive, Rollup and Svelte. Evan You made Vue and Vite. Ryan Florence went from Ember to React Router to Remix. Steve Sanderson went from Knockout to Blazor. Much of this history is a few dozen people changing their minds in public.</p>
+  <p><strong>What the browser absorbs, dies.</strong> jQuery's selectors, Prototype's array methods, Dojo's promises and modules, CoffeeScript's arrow functions and classes all moved into the platform, and the libraries lost their reason to exist. It's the most honourable way for a library to end.</p>
+
+  <nav class="pager" aria-label="Chapters">
+    <a href="era-5.html">← 5: The server returns</a>
+    <a class="next" href="loops.html">Loops: ideas that came back →</a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <p>Hand-written HTML and CSS. No build step, no bundler, no hydration, no node_modules.</p>
+</footer>
+</body>
+</html>

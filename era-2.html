@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'">
+<title>2 · Apps need structure (2009–2012) — Yet Another Framework</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="progress"></div>
+<header class="site">
+  <a class="brand" href="index.html"><span>YAF</span>Yet Another Framework</a>
+  <nav aria-label="Chapters">
+    <a href="index.html">Start</a>
+    <a href="era-1.html">1 · DOM</a>
+    <a href="era-2.html" aria-current="page">2 · MVC</a>
+    <a href="era-3.html">3 · Components</a>
+    <a href="era-4.html">4 · Compilers</a>
+    <a href="era-5.html">5 · Server</a>
+    <a href="lineage.html">Lineage</a>
+    <a href="loops.html">Loops</a>
+    <a href="colophon.html">Colophon</a>
+  </nav>
+  <button class="badge" popovertarget="nojs">JS shipped: 0 bytes</button>
+</header>
+<div id="nojs" popover>
+  <h2>This page cannot run JavaScript.</h2>
+  <p>A Content-Security-Policy of <code>script-src 'none'</code> tells your browser to refuse any script on this site. <a href="colophon.html">How it works anyway</a>.</p>
+</div>
+
+<main>
+  <p class="kicker">Chapter 2 · 2009–2012</p>
+  <h1>Apps need <mark>structure</mark></h1>
+  <p class="standfirst">jQuery made it easy to change the page. It offered no opinion on where your data lived or how the page should find out it had changed. Four frameworks gave four different answers.</p>
+
+  <p>The typical large jQuery application of 2009 stored its state in the DOM. To find out whether a to-do item was done, you checked whether its <code>&lt;li&gt;</code> had a class of <code>completed</code>. To update a counter, you found every place the count was displayed and rewrote each one by hand. Forget one and the page disagreed with itself.</p>
+
+  <p>The fix was borrowed from server and desktop programming: keep the data in <strong>models</strong>, separate from the <strong>views</strong> that display it. This was the "MV-something" era, so called because nobody agreed on the third letter.</p>
+
+  <p>The interesting question was how a view learns that a model changed. Each framework below picked a different mechanism, and each mechanism reappears later in this history.</p>
+
+  <article class="fw" id="sproutcore">
+    <header><h3>SproutCore</h3><p class="meta">2007 · Charles Jolley · later Apple</p></header>
+    <p>SproutCore tried to bring Cocoa, Apple's desktop framework, to the browser: key-value observing, bindings, and a full widget set drawn by the framework rather than written as HTML. Apple used it to build MobileMe and the first iCloud web apps.</p>
+    <dl class="facts">
+      <dt class="won">Got right</dt><dd>Bindings and computed properties that kept the UI in sync automatically. It showed that "desktop-class" apps in a browser were possible.</dd>
+      <dt class="lost">Fell short</dt><dd>It fought the web instead of using it. HTML and CSS were treated as a rendering detail, the apps were heavy, and URLs were an afterthought.</dd>
+      <dt>Outcome</dt><dd>Its 2.0 rewrite dropped the widgets, embraced HTML templates, and was renamed <a href="#ember">Ember</a>.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="backbone">
+    <header><h3>Backbone.js</h3><p class="meta">2010 · Jeremy Ashkenas</p></header>
+    <p>Backbone was the minimum viable structure: Models and Collections that fire events when they change, Views that listen and re-render, and a Router. About 1,500 lines, sitting on top of jQuery and Underscore. It was extracted from DocumentCloud, a real newsroom application.</p>
+    <dl class="facts">
+      <dt>Why</dt><dd>To get data out of the DOM with as little framework as possible.</dd>
+      <dt>Mechanism</dt><dd><strong>Manual events.</strong> A model emits <code>change</code>; you write the code that listens and updates the page.</dd>
+      <dt class="won">Got right</dt><dd>Small, readable, unopinionated, and it mapped neatly onto REST APIs. Trello, Airbnb, Hulu and many others shipped on it. You could read the entire source in an evening.</dd>
+      <dt class="lost">Fell short</dt><dd>It left the hard part to you. The simplest way to update a view was to re-render the whole template, which was slow and lost focus and scroll position. The efficient way was hand-written DOM surgery. Nested views leaked memory through forgotten listeners ("zombie views"). Every team built its own framework on top, and no two matched.</dd>
+      <dt>Outcome</dt><dd>Replaced by frameworks that automated the model-to-view step. But the instinct to "just re-render the whole thing" is exactly what <a href="era-3.html#react">React</a> later made fast.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="knockout">
+    <header><h3>Knockout</h3><p class="meta">2010 · Steve Sanderson</p></header>
+    <p>Knockout brought the MVVM pattern from Microsoft's WPF and Silverlight to the browser. You wrapped values in <strong>observables</strong>, derived others with <strong>computeds</strong>, and bound them to HTML with <code>data-bind</code> attributes. When an observable changed, exactly the DOM nodes that depended on it updated, and nothing else.</p>
+    <dl class="facts">
+      <dt>Mechanism</dt><dd><strong>Fine-grained reactivity with automatic dependency tracking.</strong> Reading an observable inside a computed subscribes to it. No diffing, no re-rendering.</dd>
+      <dt class="won">Got right</dt><dd>The reactive model itself. It was precise and efficient, and it worked back to IE6.</dd>
+      <dt class="lost">Fell short</dt><dd>The ergonomics. Every value was a function call (<code>name()</code> to read, <code>name('x')</code> to write), binding expressions lived in strings, and there was no real component or routing story. Large apps built tangled graphs of subscriptions that were hard to debug.</dd>
+      <dt>Outcome</dt><dd>Overshadowed by AngularJS, then React. But this is the single most important "loser" in the story. Twelve years later the industry rebuilt Knockout's model and <a href="era-5.html#signals">called it signals</a>.</dd>
+    </dl>
+    <p class="aside">Sanderson went on to create Blazor at Microsoft: C# components compiled to WebAssembly. The <a href="era-1.html#gwt">GWT</a> idea, a third time.</p>
+  </article>
+
+  <article class="fw" id="angularjs">
+    <header><h3>AngularJS</h3><p class="meta">2009–2010 · Miško Hevery, Adam Abrons · Google</p></header>
+    <p>AngularJS asked: what if HTML had been designed for applications? You wrote <code>ng-repeat</code>, <code>ng-model</code> and <code>{{ name }}</code> directly in your markup, attached plain JavaScript objects, and the framework kept the two in sync in both directions. It also brought dependency injection and a serious testing culture to front-end work. Hevery famously rewrote a 17,000-line internal Google app in about 1,500 lines of it.</p>
+    <dl class="facts">
+      <dt>Mechanism</dt><dd><strong>Dirty checking.</strong> After every event, Angular re-evaluated every bound expression and compared each to its previous value, looping until nothing changed.</dd>
+      <dt class="won">Got right</dt><dd>Productivity. A working data-bound form took minutes and almost no code. Models were plain objects. Directives were a genuine reusable-component mechanism, and the whole thing came with batteries: routing, HTTP, forms, testing.</dd>
+      <dt class="lost">Fell short</dt><dd>Performance fell off a cliff past a couple of thousand bindings on a page. Two-way binding made it hard to say <em>why</em> a value changed. And the concept count was brutal: scopes, the digest cycle, <code>$apply</code>, transclusion, and services versus factories versus providers.</dd>
+      <dt>Outcome</dt><dd>Hugely dominant through 2014. Then Google announced that <a href="era-3.html#angular">Angular 2</a> would be incompatible, and a large share of its users left for React and Vue.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="ember">
+    <header><h3>Ember.js</h3><p class="meta">2011 · Yehuda Katz, Tom Dale</p></header>
+    <p>Ember was SproutCore 2.0 after a rethink, led by people from the Rails and jQuery core teams. Its philosophy was Rails': convention over configuration. Its central conviction was that <strong>the URL is the heart of a web app</strong>, so the router came first, with nested routes that mapped to nested templates and data loading.</p>
+    <dl class="facts">
+      <dt>Mechanism</dt><dd><strong>Key-value observing.</strong> You read and wrote through <code>get()</code> and <code>set()</code> so the framework could track changes and update bound Handlebars templates.</dd>
+      <dt class="won">Got right</dt><dd>The router, which React Router and later Remix openly descended from. Ember CLI, which established the idea that a framework should ship its own build tool and generators. And a "stability without stagnation" upgrade process that carried apps across major versions for a decade.</dd>
+      <dt class="lost">Fell short</dt><dd>A steep learning curve, a large download, and conventions that felt like a wall whenever your app didn't fit them. Its object model predated ES classes and aged badly.</dd>
+      <dt>Outcome</dt><dd>Never beaten outright. It kept its users (LinkedIn, Apple, Discourse) but stopped gaining new ones once React arrived. Much of what it pioneered is now standard in meta-frameworks.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="meteor">
+    <header><h3>Meteor</h3><p class="meta">2012 · Meteor Development Group</p></header>
+    <p>Meteor's demo was astonishing in 2012. One JavaScript codebase ran on client and server. You queried the database from browser code. Change a record and every connected browser updated live. Deploy with one command.</p>
+    <dl class="facts">
+      <dt class="won">Got right</dt><dd>The vision. Isomorphic code, optimistic UI, live queries, a zero-config build, and calling server functions from the client as if they were local.</dd>
+      <dt class="lost">Fell short</dt><dd>It was a closed world: its own package manager instead of npm, MongoDB only, its own view layer, and real-time by default even where that didn't scale. When React and npm won, Meteor was on the wrong side of both.</dd>
+      <dt>Outcome</dt><dd>The company pivoted to GraphQL and became Apollo. But look at what <a href="era-5.html#rsc">server actions</a> offer in 2024 and compare it with that 2012 demo.</dd>
+    </dl>
+  </article>
+
+  <h2>What the era settled</h2>
+  <p>It settled that data should live in JavaScript and the DOM should be a projection of it. It did not settle how to keep them in sync. In 2012 you could choose manual events, observables, dirty checking, or key-value observing, and each had a serious flaw.</p>
+  <p>There was also a growing unease about templates. Every framework here had invented its own small language inside HTML strings or attributes, each with its own rules for loops, conditions and scope. In 2013 a team at Facebook proposed throwing all of that out. That's <a href="era-3.html">chapter 3</a>.</p>
+
+  <nav class="pager" aria-label="Chapters">
+    <a href="era-1.html">← 1: Taming the browser</a>
+    <a class="next" href="era-3.html">Chapter 3: Components →</a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <p>Hand-written HTML and CSS. No build step, no bundler, no hydration, no node_modules.</p>
+</footer>
+</body>
+</html>

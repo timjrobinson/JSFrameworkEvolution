@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'">
+<meta name="description" content="A history of JavaScript frameworks: what inspired what, why each one was built, why each one was replaced. Presented without any JavaScript.">
+<title>Yet Another Framework — a history of JavaScript frameworks, without JavaScript</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="progress"></div>
+<header class="site">
+  <a class="brand" href="index.html"><span>YAF</span>Yet Another Framework</a>
+  <nav aria-label="Chapters">
+    <a href="index.html" aria-current="page">Start</a>
+    <a href="era-1.html">1 · DOM</a>
+    <a href="era-2.html">2 · MVC</a>
+    <a href="era-3.html">3 · Components</a>
+    <a href="era-4.html">4 · Compilers</a>
+    <a href="era-5.html">5 · Server</a>
+    <a href="lineage.html">Lineage</a>
+    <a href="loops.html">Loops</a>
+    <a href="colophon.html">Colophon</a>
+  </nav>
+  <button class="badge" popovertarget="nojs">JS shipped: 0 bytes</button>
+</header>
+<div id="nojs" popover>
+  <h2>This page cannot run JavaScript.</h2>
+  <p>Not "doesn't". <em>Cannot</em>. A Content-Security-Policy of <code>script-src 'none'</code> tells your browser to refuse any script on this site.</p>
+  <p>This popover is the HTML <code>popover</code> attribute. No handler was attached. <a href="colophon.html">How the rest works</a>.</p>
+</div>
+
+<main class="wide">
+  <p class="kicker">1995 – 2026 · thirty years · roughly one new framework per week</p>
+  <h1>A history of JavaScript frameworks, told <mark>without any JavaScript</mark>.</h1>
+  <p class="standfirst">Every framework on this site was built because its author was annoyed by the previous one. This is the story of who was annoyed by what, what they built instead, what that got right, and what annoyed the next person.</p>
+
+  <p>The short version: we started by sending HTML from a server. We spent fifteen years moving everything into the browser. We have spent the last five moving most of it back. Along the way the same six or seven ideas were discovered, discarded, and rediscovered, each time with better tooling and a new name.</p>
+
+  <p>The long version is in five chapters, followed by two pages that cut across them: <a href="lineage.html">who inspired whom</a>, and <a href="loops.html">the ideas that came back around</a>.</p>
+
+  <h2>Five eras</h2>
+  <ol class="eras">
+    <li><a href="era-1.html">
+      <strong>Taming the browser</strong>
+      <span>Browsers disagreed about everything. Libraries papered over the cracks. One of them won so completely that the browser absorbed it.</span>
+      <span class="years">1995–2008 · Prototype, Dojo, YUI, MooTools, jQuery</span>
+    </a></li>
+    <li><a href="era-2.html">
+      <strong>Apps need structure</strong>
+      <span>jQuery could change a page but couldn't organise an application. Four frameworks proposed four different answers.</span>
+      <span class="years">2009–2012 · Backbone, Knockout, AngularJS, Ember</span>
+    </a></li>
+    <li><a href="era-3.html">
+      <strong>Components and the virtual DOM</strong>
+      <span>Stop tracking what changed. Describe the whole UI, re-run it on every update, and let a diff work out the rest.</span>
+      <span class="years">2013–2016 · React, Redux, Vue, Angular, Web Components</span>
+    </a></li>
+    <li><a href="era-4.html">
+      <strong>Compilers and meta-frameworks</strong>
+      <span>The framework moves into the build step, and a second layer of frameworks grows on top to put rendering back on the server.</span>
+      <span class="years">2016–2020 · Svelte, Next.js, Nuxt, hooks, Solid, Vite</span>
+    </a></li>
+    <li><a href="era-5.html">
+      <strong>The server returns</strong>
+      <span>Ship less JavaScript. Render on the server. Update only what changed. It all sounds oddly familiar.</span>
+      <span class="years">2020–now · RSC, Astro, Remix, Qwik, htmx, signals</span>
+    </a></li>
+  </ol>
+
+  <h2>Timeline</h2>
+  <p>Filter by kind. The filter is a set of radio buttons and one CSS <code>:has()</code> selector.</p>
+
+  <div class="filters" role="radiogroup" aria-label="Filter timeline">
+    <input type="radio" name="f" id="f-all" checked><label for="f-all">Everything</label>
+    <input type="radio" name="f" id="f-lib"><label for="f-lib">Libraries</label>
+    <input type="radio" name="f" id="f-fw"><label for="f-fw">Frameworks</label>
+    <input type="radio" name="f" id="f-meta"><label for="f-meta">Meta-frameworks &amp; HTML-first</label>
+    <input type="radio" name="f" id="f-plat"><label for="f-plat">Platform &amp; ideas</label>
+  </div>
+
+  <ol class="timeline">
+    <li class="plat"><time>1995</time><span><b>JavaScript</b> — written by Brendan Eich at Netscape in ten days, to make pages "come alive".</span></li>
+    <li class="plat"><time>1999</time><span><b>XMLHTTP</b> — Microsoft ships it in IE5 for Outlook Web Access. Nobody notices for five years.</span></li>
+    <li class="plat"><time>2004</time><span><b>Gmail</b> — proves a web page can behave like an application.</span></li>
+    <li class="lib"><time>2004</time><span><a href="era-1.html#dojo"><b>Dojo</b></a> — the first serious toolkit: modules, widgets, deferreds.</span></li>
+    <li class="plat"><time>2005</time><span><b>"Ajax"</b> — Jesse James Garrett names the technique. A gold rush follows.</span></li>
+    <li class="lib"><time>2005</time><span><a href="era-1.html#prototype"><b>Prototype</b></a> — makes JavaScript feel like Ruby. Ships with Rails.</span></li>
+    <li class="lib"><time>2006</time><span><a href="era-1.html#jquery"><b>jQuery</b></a> — select with CSS, chain, done. Wins the decade.</span></li>
+    <li class="lib"><time>2006</time><span><a href="era-1.html#yui"><b>YUI</b></a> and <a href="era-1.html#mootools"><b>MooTools</b></a> — the corporate toolkit and the elegant one.</span></li>
+    <li class="fw-k"><time>2006</time><span><a href="era-1.html#gwt"><b>GWT</b></a> — Google compiles Java to JavaScript. The first "compiler as framework".</span></li>
+    <li class="fw-k"><time>2007</time><span><a href="era-2.html#sproutcore"><b>SproutCore</b></a> — desktop-style apps in the browser, backed by Apple.</span></li>
+    <li class="plat"><time>2009</time><span><b>Node.js</b> — JavaScript leaves the browser. npm follows in 2010, and tooling changes forever.</span></li>
+    <li class="fw-k"><time>2010</time><span><a href="era-2.html#knockout"><b>Knockout</b></a> — observables and declarative bindings. Keep an eye on this one.</span></li>
+    <li class="fw-k"><time>2010</time><span><a href="era-2.html#backbone"><b>Backbone</b></a> — models, views, a router, and very little else.</span></li>
+    <li class="fw-k"><time>2010</time><span><a href="era-2.html#angularjs"><b>AngularJS</b></a> — HTML extended with directives, two-way binding, dependency injection.</span></li>
+    <li class="meta-k"><time>2011</time><span><a href="loops.html#wire"><b>pjax</b></a> — fetch HTML, swap a fragment, update the URL. Turbolinks follows in 2012.</span></li>
+    <li class="fw-k"><time>2011</time><span><a href="era-2.html#ember"><b>Ember</b></a> — SproutCore 2.0, renamed. Conventions, a real router, and a CLI.</span></li>
+    <li class="fw-k"><time>2012</time><span><a href="era-2.html#meteor"><b>Meteor</b></a> — one language, both sides, live data. A decade early.</span></li>
+    <li class="plat"><time>2012</time><span><b>TypeScript</b>, <b>webpack</b> and <a href="era-3.html#elm"><b>Elm</b></a> — types, bundling, and a pure functional architecture.</span></li>
+    <li class="lib"><time>2013</time><span><a href="era-3.html#react"><b>React</b></a> — "rethinking best practices". Booed at first, then copied by everyone.</span></li>
+    <li class="lib"><time>2013</time><span><a href="era-3.html#webcomponents"><b>Polymer</b></a> — Google's bet that components should be a browser feature.</span></li>
+    <li class="fw-k"><time>2014</time><span><a href="era-3.html#vue"><b>Vue</b></a> — the parts of Angular one person liked, without the rest.</span></li>
+    <li class="plat"><time>2014</time><span><a href="era-3.html#flux"><b>Flux</b></a> — data flows one way. Angular 2 is announced, incompatible with Angular 1.</span></li>
+    <li class="lib"><time>2015</time><span><a href="era-3.html#flux"><b>Redux</b></a> and <a href="era-3.html#small"><b>Preact</b></a> — Elm's architecture in JavaScript; React in 3 kB.</span></li>
+    <li class="plat"><time>2015</time><span><b>ES2015</b> — classes, modules, arrow functions, promises. Babel makes it usable today.</span></li>
+    <li class="fw-k"><time>2016</time><span><a href="era-3.html#angular"><b>Angular 2</b></a> — a full rewrite in TypeScript. Same name, different framework.</span></li>
+    <li class="fw-k"><time>2016</time><span><a href="era-4.html#svelte"><b>Svelte</b></a> — the framework that compiles itself away.</span></li>
+    <li class="meta-k"><time>2016</time><span><a href="era-4.html#next"><b>Next.js</b></a> and <a href="era-4.html#next"><b>Nuxt</b></a> — server rendering returns as a framework on top of a framework.</span></li>
+    <li class="fw-k"><time>2018</time><span><a href="era-4.html#solid"><b>Solid</b></a> — Knockout's reactivity with React's JSX and no virtual DOM.</span></li>
+    <li class="plat"><time>2019</time><span><a href="era-4.html#hooks"><b>React Hooks</b></a> — classes out, functions in. Every other framework responds.</span></li>
+    <li class="lib"><time>2019</time><span><a href="era-5.html#htmx"><b>Alpine.js</b></a> — "jQuery for the modern web": behaviour sprinkled into attributes.</span></li>
+    <li class="plat"><time>2020</time><span><a href="era-4.html#vite"><b>Vite</b></a> — native ES modules in dev. Within three years, nearly everyone's build tool.</span></li>
+    <li class="meta-k"><time>2020</time><span><a href="era-5.html#htmx"><b>htmx</b></a> and <b>Hotwire</b> — hypermedia strikes back.</span></li>
+    <li class="plat"><time>2020</time><span><a href="era-5.html#rsc"><b>React Server Components</b></a> announced — components that never reach the browser.</span></li>
+    <li class="meta-k"><time>2021</time><span><a href="era-5.html#astro"><b>Astro</b></a>, <a href="era-5.html#remix"><b>Remix</b></a>, <a href="era-5.html#qwik"><b>Qwik</b></a> — three different ways to ship less JavaScript.</span></li>
+    <li class="plat"><time>2022</time><span><a href="era-5.html#signals"><b>Signals</b></a> go mainstream — Preact adopts them; Angular, Svelte and Vue follow.</span></li>
+    <li class="meta-k"><time>2023</time><span><a href="era-5.html#rsc"><b>Next.js App Router</b></a> — server components become the default for new React apps.</span></li>
+    <li class="fw-k"><time>2024</time><span><a href="era-5.html#signals"><b>Svelte 5</b></a> and <b>React 19</b> — runes and server actions. A signals proposal reaches TC39.</span></li>
+    <li class="plat"><time>2025</time><span><a href="era-5.html#signals"><b>React Compiler</b></a> — React concedes that a compiler should do the memoising.</span></li>
+  </ol>
+  <ul class="legend">
+    <li><i class="l-lib"></i>Library</li>
+    <li><i class="l-fw"></i>Framework</li>
+    <li><i class="l-meta"></i>Meta-framework / HTML-first</li>
+    <li><i></i>Platform or idea</li>
+  </ul>
+
+  <nav class="pager" aria-label="Next chapter">
+    <a class="next" href="era-1.html">Chapter 1: Taming the browser →</a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <p>Hand-written HTML and CSS. No build step, no bundler, no hydration, no node_modules.</p>
+  <p>View source. It's the whole site.</p>
+</footer>
+</body>
+</html>

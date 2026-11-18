@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'">
+<title>Colophon: how this site works — Yet Another Framework</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="progress"></div>
+<header class="site">
+  <a class="brand" href="index.html"><span>YAF</span>Yet Another Framework</a>
+  <nav aria-label="Chapters">
+    <a href="index.html">Start</a>
+    <a href="era-1.html">1 · DOM</a>
+    <a href="era-2.html">2 · MVC</a>
+    <a href="era-3.html">3 · Components</a>
+    <a href="era-4.html">4 · Compilers</a>
+    <a href="era-5.html">5 · Server</a>
+    <a href="lineage.html">Lineage</a>
+    <a href="loops.html">Loops</a>
+    <a href="colophon.html" aria-current="page">Colophon</a>
+  </nav>
+  <button class="badge" popovertarget="nojs">JS shipped: 0 bytes</button>
+</header>
+<div id="nojs" popover>
+  <h2>This page cannot run JavaScript.</h2>
+  <p>A Content-Security-Policy of <code>script-src 'none'</code> tells your browser to refuse any script on this site. You're reading about it right now.</p>
+</div>
+
+<main>
+  <p class="kicker">Colophon</p>
+  <h1>How this site works <mark>without the thing it's about</mark></h1>
+  <p class="standfirst">Nine HTML files and one stylesheet, written by hand. There is no script tag anywhere, and a security policy that would block one if there were.</p>
+
+  <h2>The stack</h2>
+  <div class="tablewrap">
+  <table>
+    <tbody>
+      <tr><th>Framework</th><td>None</td></tr>
+      <tr><th>Build step</th><td>None. The files in the repository are the files your browser received.</td></tr>
+      <tr><th>Bundler</th><td>None</td></tr>
+      <tr><th>Dependencies</th><td>0</td></tr>
+      <tr><th>JavaScript</th><td>0 bytes, enforced by <code>Content-Security-Policy: script-src 'none'</code></td></tr>
+      <tr><th>Web fonts</th><td>None. System serif and monospace stacks.</td></tr>
+      <tr><th>Images</th><td>None</td></tr>
+      <tr><th>Hydration strategy</th><td>Not applicable</td></tr>
+      <tr><th>State management</th><td>One radio button group</td></tr>
+      <tr><th>Router</th><td><code>&lt;a href&gt;</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Things that look like JavaScript and aren't</h2>
+  <p>Most of these needed a library, or at least a script, for the bulk of the period this site covers. Each one is now a browser feature. That is <a href="lineage.html">the third pattern on the lineage page</a> in action: what the platform absorbs, the libraries stop needing to do.</p>
+
+  <article class="fw">
+    <header><h3>Animated page transitions</h3><p class="meta">once: Turbolinks, an SPA router</p></header>
+    <p>Navigate between chapters in a recent browser and the pages cross-fade. That's one CSS rule, <code>@view-transition { navigation: auto; }</code>. These are full, separate page loads, animated by the browser.</p>
+  </article>
+
+  <article class="fw">
+    <header><h3>The reading progress bar</h3><p class="meta">once: a scroll event listener</p></header>
+    <p>The yellow bar across the top is a CSS animation whose timeline is the scroll position instead of a clock: <code>animation-timeline: scroll()</code>. Browsers without support simply don't show it.</p>
+  </article>
+
+  <article class="fw">
+    <header><h3>The timeline filter</h3><p class="meta">once: jQuery, then a state library</p></header>
+    <p>The filter on the <a href="index.html">front page</a> is a group of radio inputs. One selector does the work: <code>body:has(#f-lib:checked) .timeline li:not(.lib) { display: none; }</code>. The state lives in the form control, which is where jQuery apps kept it and where chapter 2 said it shouldn't be. For one filter, it's fine.</p>
+  </article>
+
+  <article class="fw">
+    <header><h3>The popover in the header</h3><p class="meta">once: Bootstrap's modal plugin</p></header>
+    <p>The "JS shipped" button has a <code>popovertarget</code> attribute, and the panel has a <code>popover</code> attribute. The browser handles opening, light dismiss, the Escape key, focus and the top layer.</p>
+  </article>
+
+  <article class="fw">
+    <header><h3>Everything else</h3><p class="meta">once: assorted plugins</p></header>
+    <p>Collapsible sections are <code>&lt;details&gt;</code>. Highlighting the entry you jumped to is <code>:target</code>. Smooth scrolling is <code>scroll-behavior</code>. The sticky header is <code>position: sticky</code>. Dark mode follows your system through <code>prefers-color-scheme</code>. Motion is reduced if you've asked your system for that.</p>
+  </article>
+
+  <h2>What this proves, and what it doesn't</h2>
+  <p>It proves a content site, which is what this is, needs no JavaScript in 2026, and that several effects once considered "app-like" are now plain CSS.</p>
+  <p>It doesn't prove the frameworks were a mistake. This site has no user accounts, no data that changes, no editing, and no state more complex than one filter. Nobody should build a spreadsheet or a chat client this way. The frameworks in this history exist because people were building things much harder than a nine-page essay.</p>
+  <p>The fair conclusion is the one <a href="era-5.html">chapter 5</a> reaches: match the tool to the page. For this page, the right amount of JavaScript was none.</p>
+
+  <h2>A note on accuracy</h2>
+  <p>Dates are first public releases unless stated, and several projects have more than one defensible date. "Who inspired whom" is drawn from what the authors themselves have said in talks, posts and release notes, simplified to fit. Framework histories are contested by the people who lived them. If you were there and remember it differently, you may well be right.</p>
+
+  <nav class="pager" aria-label="Chapters">
+    <a href="loops.html">← Loops</a>
+    <a class="next" href="index.html">Back to the start →</a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <p>Hand-written HTML and CSS. No build step, no bundler, no hydration, no node_modules.</p>
+  <p>View source. It's the whole site.</p>
+</footer>
+</body>
+</html>

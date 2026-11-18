@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'">
+<title>1 · Taming the browser (1995–2008) — Yet Another Framework</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="progress"></div>
+<header class="site">
+  <a class="brand" href="index.html"><span>YAF</span>Yet Another Framework</a>
+  <nav aria-label="Chapters">
+    <a href="index.html">Start</a>
+    <a href="era-1.html" aria-current="page">1 · DOM</a>
+    <a href="era-2.html">2 · MVC</a>
+    <a href="era-3.html">3 · Components</a>
+    <a href="era-4.html">4 · Compilers</a>
+    <a href="era-5.html">5 · Server</a>
+    <a href="lineage.html">Lineage</a>
+    <a href="loops.html">Loops</a>
+    <a href="colophon.html">Colophon</a>
+  </nav>
+  <button class="badge" popovertarget="nojs">JS shipped: 0 bytes</button>
+</header>
+<div id="nojs" popover>
+  <h2>This page cannot run JavaScript.</h2>
+  <p>A Content-Security-Policy of <code>script-src 'none'</code> tells your browser to refuse any script on this site. <a href="colophon.html">How it works anyway</a>.</p>
+</div>
+
+<main>
+  <p class="kicker">Chapter 1 · 1995–2008</p>
+  <h1>Taming <mark>the browser</mark></h1>
+  <p class="standfirst">The first generation of libraries wasn't trying to structure applications. It was trying to make the same line of code work in Internet Explorer 6 and Firefox.</p>
+
+  <p>For its first decade JavaScript was a toy: form validation, image rollovers, and "DHTML" snowflakes that followed your cursor. Pages came from the server, fully formed. If you wanted new data, you clicked a link and got a new page.</p>
+
+  <p>Two things changed that. In 1999 Microsoft shipped <code>XMLHTTP</code> in Internet Explorer 5 so that Outlook Web Access could fetch mail without reloading. Then in 2004 and 2005, Gmail and Google Maps showed what the technique could do, and Jesse James Garrett gave it a name: <strong>Ajax</strong>.</p>
+
+  <p>Suddenly everyone wanted to write real programs in the browser, and discovered the browser was a terrible place to write programs. Event handling differed between IE and everyone else. So did Ajax, so did the box model, so did how you found an element. The language had no modules and a standard library you could fit on a postcard.</p>
+
+  <p>The libraries of this era all solved that same problem. They differed on <em>how much</em> to solve, and on whether to fix JavaScript itself or to wrap it.</p>
+
+  <article class="fw" id="dojo">
+    <header><h3>Dojo Toolkit</h3><p class="meta">2004 · Alex Russell, Dylan Schiemann, David Schontzler</p></header>
+    <p>Dojo was the first library to treat the browser as a serious application platform. It had a module system and loader years before the language did, a full widget set (Dijit), a build tool, internationalisation, and <code>Deferred</code> objects for asynchronous code.</p>
+    <dl class="facts">
+      <dt>Why</dt><dd>To pool the DHTML tricks several teams had each built in private into one professional-grade toolkit.</dd>
+      <dt>Borrowed</dt><dd>Deferreds from Python's Twisted, by way of MochiKit. Packages and widgets from desktop UI toolkits.</dd>
+      <dt class="won">Got right</dt><dd>Almost everything, early. Dojo's module loader fed directly into AMD and RequireJS. Its deferreds became jQuery's, then Promises/A+, then the <code>Promise</code> in the language.</dd>
+      <dt class="lost">Fell short</dt><dd>It was big, the documentation was thin, and it took a week to learn when jQuery took an afternoon. Enterprises adopted it; the wider web didn't.</dd>
+      <dt>Outcome</dt><dd>Never beaten on features, only on approachability. A lesson later frameworks relearned repeatedly.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="prototype">
+    <header><h3>Prototype &amp; script.aculo.us</h3><p class="meta">2005 · Sam Stephenson, Thomas Fuchs</p></header>
+    <p>Prototype came out of the Ruby on Rails world, and its goal was to make JavaScript feel like Ruby. It added <code>each</code>, <code>map</code> and <code>bind</code> to the built-in objects, gave the world the <code>$()</code> function, and wrapped Ajax in one tidy call. Its companion script.aculo.us added the animations that defined the "Web 2.0" look.</p>
+    <dl class="facts">
+      <dt>Why</dt><dd>Rails wanted Ajax helpers, and raw cross-browser JavaScript was miserable.</dd>
+      <dt>Borrowed</dt><dd>Ruby's Enumerable, class-based inheritance, and general taste.</dd>
+      <dt class="won">Got right</dt><dd>The language improvements. <code>Function.prototype.bind</code>, <code>Array.prototype.forEach</code> and friends are in JavaScript today partly because Prototype proved people wanted them.</dd>
+      <dt class="lost">Fell short</dt><dd>It did this by modifying built-in prototypes and DOM elements directly. That collided with other scripts, with browser quirks (IE didn't expose element prototypes at all), and eventually with the standards process.</dd>
+      <dt>Outcome</dt><dd>Rails switched its default to jQuery in 2011. "Don't modify objects you don't own" became a rule of the language.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="jquery">
+    <header><h3>jQuery</h3><p class="meta">2006 · John Resig</p></header>
+    <p>jQuery had one idea and executed it perfectly: find elements with a CSS selector, then do something to all of them. <code>$('.item').hide()</code>. It wrapped elements instead of modifying them, so it coexisted with anything. Every method returned the collection, so calls chained. And it had a plugin system simple enough that thousands of people wrote one.</p>
+    <dl class="facts">
+      <dt>Why</dt><dd>Resig found Prototype's approach invasive and the DOM API unbearably verbose. He wanted the common cases to be one line.</dd>
+      <dt>Borrowed</dt><dd>CSS-selector querying from Dean Edwards' cssQuery and Simon Willison's getElementsBySelector. The <code>$</code> from Prototype.</dd>
+      <dt class="won">Got right</dt><dd>Developer experience, before anyone called it that. Excellent docs, a tiny concept count, and browser bugs that simply vanished. At its peak it ran on most of the web's sites, and it's still on a majority of them.</dd>
+      <dt class="lost">Fell short</dt><dd>It was a tool for <em>changing pages</em>, not building applications. There was no place to keep state except the DOM itself, so large jQuery apps became webs of event handlers reading values back out of the HTML they'd just written.</dd>
+      <dt>Outcome</dt><dd>Killed by success. Browsers shipped <code>querySelectorAll</code>, <code>classList</code>, <code>fetch</code> and CSS transitions, each a standardised piece of jQuery. Once IE died, nothing was left to paper over.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="mootools">
+    <header><h3>MooTools</h3><p class="meta">2006 · Valerio Proietti</p></header>
+    <p>MooTools was Prototype's ideas with more polish: a proper class system, a modular build, and very smooth animation. For a while "jQuery or MooTools?" was a real argument, summed up as "jQuery is for the DOM, MooTools is for JavaScript".</p>
+    <dl class="facts">
+      <dt class="won">Got right</dt><dd>Classes with mixins, years before the language had <code>class</code>. Code written in MooTools tended to be better organised than the jQuery equivalent.</dd>
+      <dt class="lost">Fell short</dt><dd>It extended native prototypes, as Prototype did. So many old sites still carry it that TC39 has twice had to rename new language features to avoid breaking them: <code>Array.prototype.contains</code> became <code>includes</code>, and <code>flatten</code> became <code>flat</code>.</dd>
+      <dt>Outcome</dt><dd>Faded as jQuery's plugin ecosystem pulled ahead. Its lasting influence on JavaScript is, awkwardly, in the names the language couldn't use.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="yui">
+    <header><h3>YUI &amp; Ext JS</h3><p class="meta">2006 · Yahoo · Jack Slocum</p></header>
+    <p>The Yahoo User Interface library was the corporate answer: carefully namespaced, exhaustively tested across a published browser-support grid, and complete with widgets. Ext JS began as an extension to YUI and grew into a commercial toolkit for building desktop-style admin screens.</p>
+    <dl class="facts">
+      <dt class="won">Got right</dt><dd>Engineering discipline. YUI gave the industry graded browser support, CSS resets and grids, a minifier, and the first widely used performance guidance. YUI 3's module loader was ahead of its time.</dd>
+      <dt class="lost">Fell short</dt><dd>Verbose (<code>YAHOO.util.Dom.getElementsByClassName</code>), and maintained by one company whose fortunes were declining.</dd>
+      <dt>Outcome</dt><dd>Yahoo ended development in 2014, citing the shift to Node, npm and the new application frameworks. Ext JS survives in enterprise software.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="gwt">
+    <header><h3>Google Web Toolkit</h3><p class="meta">2006 · Google</p></header>
+    <p>GWT took the most radical position of the era: JavaScript is too poor a language to write applications in, so don't. Write Java, with types and an IDE, and compile it to JavaScript, generating a separate optimised bundle per browser.</p>
+    <dl class="facts">
+      <dt>Why</dt><dd>Google had large teams of Java engineers and large applications to build.</dd>
+      <dt class="won">Got right</dt><dd>The diagnosis. Static types, dead-code elimination, code splitting, and treating JavaScript as a compile target are all standard practice now.</dd>
+      <dt class="lost">Fell short</dt><dd>The cure. Slow compiles, opaque output, awkward interop with ordinary JavaScript libraries, and a UI model borrowed from Swing.</dd>
+      <dt>Outcome</dt><dd>Google moved on to Closure, Dart and then TypeScript. But "the framework is a compiler" would come back ten years later, <a href="era-4.html#svelte">and win</a>.</dd>
+    </dl>
+  </article>
+
+  <h2>What the era settled</h2>
+  <p>By 2008 the browser-compatibility problem was, in practice, solved, and jQuery was the answer. The losing libraries were not worse engineered. Dojo and YUI were more complete; MooTools was arguably more elegant. They lost because jQuery asked for less: less to learn, less to commit to, less to load.</p>
+  <p>What nobody had solved was the next problem. Web apps were getting bigger, and a library for poking at the DOM gave no help in deciding where the data should live. That is where <a href="era-2.html">chapter 2</a> starts.</p>
+
+  <nav class="pager" aria-label="Chapters">
+    <a href="index.html">← Start</a>
+    <a class="next" href="era-2.html">Chapter 2: Apps need structure →</a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <p>Hand-written HTML and CSS. No build step, no bundler, no hydration, no node_modules.</p>
+</footer>
+</body>
+</html>

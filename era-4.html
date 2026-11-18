@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'">
+<title>4 · Compilers and meta-frameworks (2016–2020) — Yet Another Framework</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="progress"></div>
+<header class="site">
+  <a class="brand" href="index.html"><span>YAF</span>Yet Another Framework</a>
+  <nav aria-label="Chapters">
+    <a href="index.html">Start</a>
+    <a href="era-1.html">1 · DOM</a>
+    <a href="era-2.html">2 · MVC</a>
+    <a href="era-3.html">3 · Components</a>
+    <a href="era-4.html" aria-current="page">4 · Compilers</a>
+    <a href="era-5.html">5 · Server</a>
+    <a href="lineage.html">Lineage</a>
+    <a href="loops.html">Loops</a>
+    <a href="colophon.html">Colophon</a>
+  </nav>
+  <button class="badge" popovertarget="nojs">JS shipped: 0 bytes</button>
+</header>
+<div id="nojs" popover>
+  <h2>This page cannot run JavaScript.</h2>
+  <p>A Content-Security-Policy of <code>script-src 'none'</code> tells your browser to refuse any script on this site. <a href="colophon.html">How it works anyway</a>.</p>
+</div>
+
+<main>
+  <p class="kicker">Chapter 4 · 2016–2020</p>
+  <h1>Compilers and <mark>meta-frameworks</mark></h1>
+  <p class="standfirst">Once every project had a build step anyway, two questions followed. How much of the framework could the build step do in advance? And could it also render the page on the server, so the user wasn't staring at a blank screen?</p>
+
+  <p>The single-page app of 2016 had a characteristic failure. The server sent an almost empty HTML file. The browser downloaded a large bundle, parsed it, ran it, fetched data, and only then drew anything. On a fast laptop this was fine. On a mid-range phone on a mobile network it could take ten seconds. Search engines and link previews often saw nothing at all.</p>
+
+  <p>Two separate movements grew out of that. One pushed work from the browser into the compiler. The other pushed rendering from the browser back to the server. They would merge in the next chapter.</p>
+
+  <article class="fw" id="next">
+    <header><h3>Next.js, Nuxt &amp; Gatsby</h3><p class="meta">2016 · Guillermo Rauch / Zeit &nbsp;·&nbsp; Sébastien &amp; Alexandre Chopin &nbsp;·&nbsp; Kyle Mathews</p></header>
+    <p>React could render to an HTML string on a server from early on. Wiring that up yourself, with routing, data fetching, code splitting and a bundler config, was a project in itself. Next.js packaged it. Put a file in <code>pages/</code> and it became a route, rendered on the server, then "hydrated" in the browser so React could take over. Nuxt did the same for Vue weeks later. Gatsby did it at build time, producing static files.</p>
+    <dl class="facts">
+      <dt>Why</dt><dd>To fix the blank-page problem and end the per-project webpack configuration ritual.</dd>
+      <dt>Borrowed</dt><dd>File-system routing straight from PHP, as the Next.js announcement said outright. Batteries-included conventions from Ember and Rails.</dd>
+      <dt class="won">Got right</dt><dd>They made the view library into a full framework and settled the "which router, which bundler" exhaustion. The <strong>meta-framework</strong> became the normal way to start a project. By 2023 React's own docs recommended starting with one.</dd>
+      <dt class="lost">Fell short</dt><dd><strong>Hydration.</strong> The server renders the page, then the browser downloads all the same components and runs them all again just to attach event handlers. The user pays for the page twice, and it looks ready before it responds. Gatsby had a further problem: its mandatory GraphQL data layer made builds slow and the learning curve steep. It faded after 2020 and was absorbed by Netlify in 2023.</dd>
+      <dt>Outcome</dt><dd>Next.js became the default React setup. The hydration cost it normalised became the central problem of <a href="era-5.html">the next era</a>.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="svelte">
+    <header><h3>Svelte</h3><p class="meta">2016 · Rich Harris</p></header>
+    <p>Rich Harris was a graphics editor at the Guardian, building interactive articles that had to load fast on phones. His earlier library, Ractive, was a conventional runtime. Svelte's premise was that the framework shouldn't be in the browser at all. A Svelte component is compiled, at build time, into plain JavaScript that updates precisely the DOM nodes it needs to. No virtual DOM, no diffing, very little runtime.</p>
+    <p>Svelte 3, in 2019, pushed further. Reactivity became a language feature: assign to a variable with <code>count += 1</code> and the compiler works out what to update.</p>
+    <dl class="facts">
+      <dt>Reacted to</dt><dd>The virtual DOM, which Harris called "pure overhead": work done at runtime to discover what a compiler could have known beforehand.</dd>
+      <dt>Borrowed</dt><dd>Single-file components from Vue and Ractive. The compile-it-away stance from <a href="era-1.html#gwt">GWT</a>'s lineage, though with a far lighter touch.</dd>
+      <dt class="won">Got right</dt><dd>Tiny output, strong performance, and the least code per component of any mainstream framework. It consistently topped developer-satisfaction surveys. It made "compiler" a normal word in framework design.</dd>
+      <dt class="lost">Fell short</dt><dd>Compile-time reactivity only worked at the top level of a <code>.svelte</code> file. Move logic into a plain <code>.js</code> module and it stopped being reactive, so you needed a second system (stores) for shared state. The rules around <code>$:</code> statements had surprising edge cases. The ecosystem stayed small beside React's.</dd>
+      <dt>Outcome</dt><dd>Svelte fixed these in 2024 by replacing its own model with <a href="era-5.html#signals">runes</a>, which are signals with compiler help.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="hooks">
+    <header><h3>React Hooks</h3><p class="meta">2019 · Sebastian Markbåge, Sophie Alpert, Dan Abramov</p></header>
+    <p>Not a new framework, but a change large enough to count as one. Until 2019, React components with state were classes. Sharing stateful logic between them needed awkward patterns, and related code was scattered across lifecycle methods. Hooks let plain functions hold state with <code>useState</code> and run side effects with <code>useEffect</code>, and let you package both into reusable custom hooks.</p>
+    <dl class="facts">
+      <dt class="won">Got right</dt><dd>Composition. Custom hooks were a far better unit of reuse than mixins, higher-order components or render props. The whole industry followed: Vue's Composition API was a direct response.</dd>
+      <dt class="lost">Fell short</dt><dd>Hooks made React's central inefficiency the developer's job. Because the whole function re-runs on every render, you must tell React what each effect depends on, by hand, in an array. Get it wrong and you have stale values or infinite loops. Performance means wrapping things in <code>useMemo</code> and <code>useCallback</code>. And <code>useEffect</code> became the default home for data fetching, which it was never well suited to.</dd>
+      <dt>Outcome</dt><dd>The dependency array is the most persuasive advertisement <a href="era-5.html#signals">signals</a> ever had. Systems with automatic dependency tracking simply don't need one.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="solid">
+    <header><h3>Solid</h3><p class="meta">2018 · Ryan Carniato</p></header>
+    <p>Ryan Carniato had been a happy Knockout user and didn't believe the virtual DOM was a necessary cost. Solid looks like React: JSX, components, and a <code>createSignal</code> that resembles <code>useState</code>. It works like Knockout. A component function runs <em>once</em>. The compiler turns JSX into real DOM nodes wired directly to signals, so when a signal changes, only the specific text node or attribute bound to it updates.</p>
+    <dl class="facts">
+      <dt>Borrowed</dt><dd>Fine-grained reactivity from Knockout and Adam Haile's S.js. JSX and one-way data flow from React. Compilation from Svelte.</dd>
+      <dt class="won">Got right</dt><dd>It showed you could keep React's authoring model and drop its runtime cost, with benchmark results near hand-written DOM code. No dependency arrays and no memoisation.</dd>
+      <dt class="lost">Fell short</dt><dd>It looks like React and isn't, so React habits such as destructuring props silently break reactivity. Its ecosystem and job market are small.</dd>
+      <dt>Outcome</dt><dd>Modest adoption, enormous influence. Carniato's writing and benchmarks did more than anything else to bring signals back, and nearly every major framework has since adopted Solid's core design.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="vite">
+    <header><h3>The tooling underneath: webpack to Vite</h3><p class="meta">2012–2020</p></header>
+    <p>None of this era was possible without build tools, and they have their own lineage. Browserify (2011) let browser code use Node-style modules. webpack (2012) bundled everything, including CSS and images, and enabled code splitting, at the price of famously intricate configuration. Babel (2014) let people write next year's JavaScript, and JSX, today. Rollup (2015), also by Rich Harris, introduced tree shaking.</p>
+    <dl class="facts">
+      <dt class="lost">Fell short</dt><dd>By 2019 a large app's dev server could take a minute to start, because it bundled everything before serving anything.</dd>
+      <dt>Outcome</dt><dd>Vite, from Vue's Evan You in 2020, served source files as native ES modules and transformed them on request with compilers written in Go and later Rust. Startup became near-instant. Within three years almost every framework except Next.js had standardised on it, a rare case of the ecosystem agreeing on something.</dd>
+    </dl>
+    <p class="aside">Native modules in the browser, no bundle in development: this is roughly how people loaded scripts in 2008, with one tag per file. The difference is that it now works.</p>
+  </article>
+
+  <h2>What the era settled</h2>
+  <p>A framework is no longer just a library you load. It is a compiler, a dev server, a router, and a server runtime. The questions shifted accordingly, from "how do I update the DOM efficiently?" to "what should run where, and when?"</p>
+  <p>And the price of the answer so far, hydration, was now obvious to everyone. The site rendered on the server and then did it all again in the browser. <a href="era-5.html">Chapter 5</a> covers the attempts to stop paying twice.</p>
+
+  <nav class="pager" aria-label="Chapters">
+    <a href="era-3.html">← 3: Components</a>
+    <a class="next" href="era-5.html">Chapter 5: The server returns →</a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <p>Hand-written HTML and CSS. No build step, no bundler, no hydration, no node_modules.</p>
+</footer>
+</body>
+</html>

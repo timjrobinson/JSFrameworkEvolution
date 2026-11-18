@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'">
+<title>5 · The server returns (2020–now) — Yet Another Framework</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="progress"></div>
+<header class="site">
+  <a class="brand" href="index.html"><span>YAF</span>Yet Another Framework</a>
+  <nav aria-label="Chapters">
+    <a href="index.html">Start</a>
+    <a href="era-1.html">1 · DOM</a>
+    <a href="era-2.html">2 · MVC</a>
+    <a href="era-3.html">3 · Components</a>
+    <a href="era-4.html">4 · Compilers</a>
+    <a href="era-5.html" aria-current="page">5 · Server</a>
+    <a href="lineage.html">Lineage</a>
+    <a href="loops.html">Loops</a>
+    <a href="colophon.html">Colophon</a>
+  </nav>
+  <button class="badge" popovertarget="nojs">JS shipped: 0 bytes</button>
+</header>
+<div id="nojs" popover>
+  <h2>This page cannot run JavaScript.</h2>
+  <p>A Content-Security-Policy of <code>script-src 'none'</code> tells your browser to refuse any script on this site. <a href="colophon.html">How it works anyway</a>.</p>
+</div>
+
+<main>
+  <p class="kicker">Chapter 5 · 2020–now</p>
+  <h1>The server <mark>returns</mark></h1>
+  <p class="standfirst">Two corrections define the current era. Rendering is moving back to the server, and change tracking is moving back to observables. Both are ideas from 2010 or earlier, returning with fifteen years of tooling behind them.</p>
+
+  <p>By 2020 the measurements were hard to argue with. Typical sites shipped several hundred kilobytes of JavaScript, most pages were mostly static content, and the phones most people actually owned were far slower than the laptops the sites were built on. Google began ranking pages partly on responsiveness metrics.</p>
+
+  <p>The frameworks below all accept the same diagnosis: we send too much JavaScript, and we run too much of it. They disagree, sharply, about the treatment.</p>
+
+  <article class="fw" id="astro">
+    <header><h3>Astro &amp; islands</h3><p class="meta">2021 · Fred K. Schott and team</p></header>
+    <p>Astro's default output is HTML with no JavaScript at all. Components run on the server or at build time, and only render markup. If a piece of the page needs to be interactive, you mark that component explicitly, and Astro ships the code for it alone. Each such piece is an <strong>island</strong> in a sea of static HTML. The island can be written in React, Vue, Svelte or Solid; Astro doesn't mind.</p>
+    <dl class="facts">
+      <dt>Borrowed</dt><dd>The term "islands" came from Katie Sylor-Miller at Etsy and was popularised by Preact's Jason Miller in 2020. eBay's Marko had done partial hydration years earlier.</dd>
+      <dt class="won">Got right</dt><dd>The right default for content sites: blogs, docs, marketing, shops. Zero JavaScript unless you ask for it is easy to reason about, and performance follows without effort.</dd>
+      <dt class="lost">Fell short</dt><dd>It is a multi-page architecture. State doesn't naturally persist across navigations, and islands on the same page don't share a component tree. For a highly interactive application, such as an editor or a dashboard, you're working against the grain.</dd>
+      <dt>Outcome</dt><dd>The standard choice for content-heavy sites. If you squint, an island is a jQuery widget on a server-rendered page, with a far better authoring model.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="remix">
+    <header><h3>Remix</h3><p class="meta">2021 · Ryan Florence, Michael Jackson</p></header>
+    <p>The authors of React Router argued that the industry had forgotten how the web worked. Remix routes declare a <code>loader</code> that fetches data on the server and an <code>action</code> that handles form submissions. Mutations are real <code>&lt;form&gt;</code> posts, so the app works before JavaScript loads and gets smoother once it does. Nested routes load their data in parallel.</p>
+    <dl class="facts">
+      <dt>Borrowed</dt><dd>Nested routing from Ember, via React Router. Forms, HTTP caching and progressive enhancement from the pre-Ajax web. The loader/action shape from Rails and PHP controllers.</dd>
+      <dt class="won">Got right</dt><dd>It removed a whole category of client-side state: no loading-spinner bookkeeping, no hand-written cache invalidation after a mutation. It re-popularised "use the platform", and its data APIs were copied by nearly every other meta-framework.</dd>
+      <dt class="lost">Fell short</dt><dd>It still hydrated the whole page, so it didn't reduce the JavaScript shipped. And it launched just as React committed to Server Components, a different answer to the same question.</dd>
+      <dt>Outcome</dt><dd>Acquired by Shopify in 2022, then folded back into React Router v7 in 2024. The team has since announced a new Remix that isn't built on React at all.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="rsc">
+    <header><h3>React Server Components</h3><p class="meta">announced 2020 · stable in Next.js 2023, React 19 in 2024</p></header>
+    <p>RSC splits components into two kinds. Server components run only on the server. They can read a database directly, and their code is never sent to the browser. Client components are the familiar interactive kind, marked with <code>'use client'</code>. The server streams a serialised description of the rendered tree, and React merges it into the page without discarding client state. Server actions complete the loop: a function marked <code>'use server'</code> can be passed to a <code>&lt;form action&gt;</code> and called from the browser as if it were local.</p>
+    <dl class="facts">
+      <dt>Why</dt><dd>To stop shipping code for parts of the page that never change, and to remove the client-side fetch waterfall, without giving up the single component model.</dd>
+      <dt>Borrowed</dt><dd>In spirit, PHP and XHP, where React started: components that query data and emit markup on the server. Server actions echo Meteor's methods and classic RPC.</dd>
+      <dt class="won">Got right</dt><dd>One tree, mixing server and client components at any depth, is more flexible than islands. Data fetching lives next to the component that needs it. Large dependencies used only for rendering cost the user nothing.</dd>
+      <dt class="lost">Fell short</dt><dd>Complexity. There are now two kinds of component with different rules, and a boundary that's easy to cross by accident. It requires deep bundler integration, so for years it worked properly only in Next.js, which raised questions about React's independence from Vercel. Caching behaviour confused people enough to be redesigned. And a transparent client-to-server call is a public HTTP endpoint that doesn't look like one, which has produced real security bugs.</dd>
+      <dt>Outcome</dt><dd>The default for new Next.js apps, and still contested. Many teams continue to build client-rendered React with Vite and are content.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="qwik">
+    <header><h3>Qwik</h3><p class="meta">2021 · Miško Hevery · Builder.io</p></header>
+    <p>The creator of AngularJS returned with the most radical answer to hydration: don't. Qwik calls its approach <strong>resumability</strong>. The server serialises not just the HTML but the application's state and the location of every event handler into the page. The browser starts with a roughly 1 kB loader. When you click a button, Qwik downloads only the code for that handler and runs it. Nothing is re-executed on startup.</p>
+    <dl class="facts">
+      <dt class="won">Got right</dt><dd>Startup cost stays constant however large the app grows, which no hydrating framework can claim. It identified hydration itself, and not bundle size, as the root problem.</dd>
+      <dt class="lost">Fell short</dt><dd>Everything must be serialisable, which constrains how you write code, and the <code>$</code> markers that tell the compiler where to split are a new thing to learn. Lazy-loading on interaction risks a delay on first click unless prefetching is tuned. It arrived into a market already committed to React.</dd>
+      <dt>Outcome</dt><dd>A small user base. The idea has spread further than the framework, which is the pattern for most of the influential entries in this history.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="htmx">
+    <header><h3>htmx, Hotwire, LiveView &amp; Alpine</h3><p class="meta">2018–2020 · Carson Gross · Basecamp · Chris McCord · Caleb Porzio</p></header>
+    <p>The most complete rejection of the SPA came from server-side developers. Their argument: the server already renders HTML and already holds the state, so let it keep doing that. htmx adds a few attributes to HTML so that any element can make a request and swap the HTML response into the page. Hotwire does the same for Rails, and Phoenix LiveView and Laravel Livewire push server-rendered diffs over a socket. Alpine.js covers the remaining small client-side behaviour, such as dropdowns and toggles, with attributes in the markup.</p>
+    <dl class="facts">
+      <dt>Borrowed</dt><dd>htmx is a rewrite of Gross's own intercooler.js from 2013. The technique is pjax and Turbolinks from 2011–12, and before that, the Rails Ajax helpers of 2005. Alpine's syntax is Vue's.</dd>
+      <dt>Reacted to</dt><dd>The cost of maintaining two applications, a JSON API and a JavaScript client, plus the code to keep their state in agreement.</dd>
+      <dt class="won">Got right</dt><dd>For forms, tables and CRUD screens, which is most business software, it removes a huge amount of machinery. No build step, any backend language, one source of truth.</dd>
+      <dt class="lost">Fell short</dt><dd>Every interaction is a network round trip, so it suits neither offline use nor rich client-side interaction such as drag-and-drop editors or anything needing instant optimistic feedback. Complex pages can become a tangle of fragments and swap targets.</dd>
+      <dt>Outcome</dt><dd>A real and growing alternative, especially outside the JavaScript community. It has reminded a generation of developers that the SPA is one option and not a law.</dd>
+    </dl>
+  </article>
+
+  <article class="fw" id="signals">
+    <header><h3>Signals everywhere</h3><p class="meta">2022–2025 · Preact, Angular, Svelte, Vue, and a TC39 proposal</p></header>
+    <p>A signal is a value that knows who is reading it. Read it inside a computation and you're subscribed automatically. Change it, and exactly the dependents re-run. That is the definition of a Knockout observable from 2010. What changed is everything around it: Proxies and compilers hide the awkward syntax, and a decade of research (much of it by Solid's Ryan Carniato and Vue's Evan You) fixed the glitches and ordering bugs that made big observable graphs unpredictable.</p>
+    <p>Between 2022 and 2025, nearly every framework converged on this design:</p>
+    <ul>
+      <li><strong>Preact</strong> added signals in 2022, bypassing its own virtual DOM for bound values.</li>
+      <li><strong>Angular</strong> introduced signals in 2023 and has since made them the basis of change detection, with zone.js no longer needed in new apps.</li>
+      <li><strong>Svelte 5</strong> (2024) replaced compile-time reactivity with "runes" such as <code>$state</code> and <code>$derived</code>: signals underneath, compiler sugar on top, and usable in plain modules.</li>
+      <li><strong>Vue</strong> already had them, as <code>ref</code> and <code>computed</code>. Its Vapor mode compiles templates straight to DOM operations and drops the virtual DOM, in the manner of Solid.</li>
+      <li><strong>Qwik</strong> and <strong>Solid</strong> were built on them from the start.</li>
+      <li>A proposal to add signals to JavaScript itself reached TC39 in 2024, written jointly by authors from most of these frameworks.</li>
+    </ul>
+    <dl class="facts">
+      <dt class="won">Got right</dt><dd>Updates cost in proportion to what changed, not to the size of the component tree. No dependency arrays, no manual memoisation.</dd>
+      <dt class="lost">Open question</dt><dd>The old Knockout complaint hasn't entirely gone: data flow is implicit, so "why did this update?" can still be harder to answer than in a top-down re-render.</dd>
+      <dt>The holdout</dt><dd>React. Its team has consistently declined signals, preferring to keep "UI is a function of state, re-run from the top" as the model. Its answer is the <strong>React Compiler</strong>, stable since late 2025, which inserts memoisation automatically at build time. So React, too, now ships a compiler to avoid redundant work. It just arrived from the other direction.</dd>
+    </dl>
+  </article>
+
+  <h2>Where that leaves us</h2>
+  <p>There is, for the first time in a long while, something like consensus on the pieces. Render on the server first. Send as little JavaScript as the page really needs. Update with fine-grained reactivity or a compiler that approximates it. Use a meta-framework built on Vite. Type everything.</p>
+  <p>There's no consensus on the packaging, and the honest reason is that "web page" covers too much. A newspaper article and a spreadsheet are different problems. Astro and htmx are excellent for the first and awkward for the second. A client-rendered app is the reverse. RSC and Qwik are attempts at one model that spans both, and they pay for that reach in complexity.</p>
+  <p>What's striking, read end to end, is how little of this is new. The <a href="loops.html">loops page</a> lays the repeats side by side.</p>
+
+  <nav class="pager" aria-label="Chapters">
+    <a href="era-4.html">← 4: Compilers</a>
+    <a class="next" href="lineage.html">Lineage: who inspired whom →</a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <p>Hand-written HTML and CSS. No build step, no bundler, no hydration, no node_modules.</p>
+</footer>
+</body>
+</html>
